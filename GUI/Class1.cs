@@ -8,5 +8,11 @@ namespace GUI
 {
     public class Class1
     {
+        public static void Main()
+        {
+            tcp myTcp = new tcp();
+            myTcp.Run();
+        }
+
     }
 }
