@@ -15,8 +15,6 @@ namespace GUI
         {
             Settings settings = new Settings();
             string settingsStr;
-            string logStr;
-            int eventLogLength;
             int numHandlers;
 
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
@@ -30,7 +28,7 @@ namespace GUI
             {
                 while (true)
                 {
-                    Console.WriteLine("please choose operation: enter 1 for settings or 2 for log");
+                    Console.WriteLine("please choose oper ation: enter 1 for settings or 2 for log");
                     int num = int.Parse(Console.ReadLine());
                     writer.Write(num);
 
@@ -57,13 +55,7 @@ namespace GUI
 
                     else
                     {
-                        Console.WriteLine("Log:");
-                        eventLogLength = reader.ReadInt32();
-                        for (int k = 0; k < eventLogLength; k++)
-                        {
-                            logStr = reader.ReadString();
-                            Console.WriteLine(logStr);
-                        }
+                        Console.WriteLine(reader.ReadString());
                         Console.WriteLine();
                     }
                     Console.WriteLine();
