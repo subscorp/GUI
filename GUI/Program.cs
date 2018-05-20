@@ -13,7 +13,7 @@ namespace GUI
     {
         static void Main(string[] args)
         {
-            IClient client = new ConsoleClient();
+            IClient client = new ConsoleClientV2();
             client.HandleClient();
         }
     }

@@ -16,6 +16,8 @@ namespace GUI
             Settings settings = new Settings();
             string settingsStr;
             string logStr;
+            int eventLogLength;
+            int numHandlers;
 
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             TcpClient client = new TcpClient();
@@ -37,6 +39,7 @@ namespace GUI
                         Console.WriteLine("Settings:");
                         settingsStr = reader.ReadString();
                         settings = Settings.FromJSON(settingsStr);
+                        numHandlers = settings.Handlers.Length;
 
                         Console.WriteLine("Output Directory: {0}", settings.OutputDir);
 
@@ -46,25 +49,24 @@ namespace GUI
 
                         Console.WriteLine("Thumbnail Size: {0}", settings.ThumbnailSize);
 
-
-                        //               num = reader.ReadInt32();
-                        //               Console.WriteLine();
                         Console.WriteLine("Handlers:");
 
-                        //                for (int i = 0; i < num; i++)
-                        //                {
-                        //                    handler = reader.ReadString();
-                        //                    Console.WriteLine(handler);
-                        //                }
-                        Console.WriteLine();
+                        for (int i = 0; i < numHandlers; i++)
+                            Console.WriteLine(settings.Handlers[i]);
                     }
 
                     else
                     {
                         Console.WriteLine("Log:");
-                        logStr = reader.ReadString();
-                        Console.WriteLine(logStr);
+                        eventLogLength = reader.ReadInt32();
+                        for (int k = 0; k < eventLogLength; k++)
+                        {
+                            logStr = reader.ReadString();
+                            Console.WriteLine(logStr);
+                        }
+                        Console.WriteLine();
                     }
+                    Console.WriteLine();
                 }
             }
             client.Close();
