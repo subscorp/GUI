@@ -17,6 +17,9 @@ namespace GUI
             string settingsStr;
             int numHandlers;
 
+            string logStr;
+            LogEntry entry;
+
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             TcpClient client = new TcpClient();
             client.Connect(ep);
@@ -28,7 +31,7 @@ namespace GUI
             {
                 while (true)
                 {
-                    Console.WriteLine("please choose oper ation: enter 1 for settings or 2 for log");
+                    Console.WriteLine("please choose operation: enter 1 for Settings or 2 for Log");
                     int num = int.Parse(Console.ReadLine());
                     writer.Write(num);
 
@@ -55,8 +58,20 @@ namespace GUI
 
                     else
                     {
-                        Console.WriteLine(reader.ReadString());
+                        Console.WriteLine("Log:");
+                        int numLogEntries = reader.ReadInt32();
+                        for (int i = 0; i < numLogEntries; i++)
+                        {
+                            logStr = reader.ReadString();
+                            entry = LogEntry.FromJSON(logStr);
+
+                            Console.WriteLine("Message: " + entry.Message);
+                            Console.WriteLine("Type: " + entry.Type);
+                            Console.WriteLine();
+                        }
+                        
                         Console.WriteLine();
+
                     }
                     Console.WriteLine();
                 }
