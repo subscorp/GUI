@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace GUI
 {
@@ -29,14 +30,18 @@ namespace GUI
             using (BinaryReader reader = new BinaryReader(stream))
             using (BinaryWriter writer = new BinaryWriter(stream))
             {
-                while (true)
+                while (client.Connected)
                 {
                     Console.WriteLine("please choose operation: enter 1 for Settings or 2 for Log");
                     int num = int.Parse(Console.ReadLine());
-                    writer.Write(num);
+
 
                     if (num == 1)
                     {
+                        writer.Write(JsonConvert.SerializeObject(new CommandArgs()
+                        {
+                            CommandId = num
+                        }));
                         Console.WriteLine("Settings:");
                         settingsStr = reader.ReadString();
                         settings = Settings.FromJSON(settingsStr);
@@ -56,22 +61,33 @@ namespace GUI
                             Console.WriteLine(settings.Handlers[i]);
                     }
 
-                    else
+                    else if (num == 2)
                     {
-                        Console.WriteLine("Log:");
-                        int numLogEntries = reader.ReadInt32();
-                        for (int i = 0; i < numLogEntries; i++)
+                        writer.Write(JsonConvert.SerializeObject(new CommandArgs()
                         {
-                            logStr = reader.ReadString();
-                            entry = LogEntry.FromJSON(logStr);
+                            CommandId = num
+                        }));
+                        Console.WriteLine("Log:");
+                        var json = reader.ReadString();
+                        var arr = JsonConvert.DeserializeObject<LogEntry[]>(json);
 
-                            Console.WriteLine("Message: " + entry.Message);
-                            Console.WriteLine("Type: " + entry.Type);
-                            Console.WriteLine();
+                        foreach (var obj in arr)
+                        {
+                            Console.WriteLine(obj.Type);
+                            Console.WriteLine(obj.Message);
                         }
-                        
-                        Console.WriteLine();
 
+                    }
+                    else if (num == 3)
+                    {
+                        Console.WriteLine("Path:");
+                        var path = Console.ReadLine();
+                        var json = JsonConvert.SerializeObject(new CommandArgs()
+                        {
+                            CommandId = 3,
+                            Arg = path
+                        });
+                        writer.Write(json);
                     }
                     Console.WriteLine();
                 }

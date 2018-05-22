@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="CommandArgs.cs" />
     <Compile Include="ConsoleClient.cs" />
     <Compile Include="ConsoleClientV2.cs" />
     <Compile Include="IClient.cs" />
